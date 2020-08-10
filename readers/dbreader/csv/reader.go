@@ -153,13 +153,13 @@ func (r *csvReader) rewindHead(cr *csv.Reader) error {
 }
 
 func parseValue(value string) interface{} {
-	if v, err := strconv.ParseInt(value, 32, 64); err == nil {
+	if v, err := strconv.ParseInt(value, 0, 64); err == nil {
 		return v
 	}
-	if v, err := strconv.ParseUint(value, 32, 64); err == nil {
+	if v, err := strconv.ParseUint(value, 0, 64); err == nil {
 		return v
 	}
-	if v, err := strconv.ParseFloat(value, 32); err == nil {
+	if v, err := strconv.ParseFloat(value, 0); err == nil {
 		return v
 	}
 	if v, err := strconv.ParseBool(value); err == nil {

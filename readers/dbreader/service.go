@@ -96,8 +96,7 @@ func (as *adapterService) Publish(m Message) error {
 				Subtopic:  col,
 				Payload:   genSenML(rowID, v),
 			}
-			topic := "channels." + m.ChannelID + "." + col
-			if err := as.publisher.Publish(topic, msg); err != nil {
+			if err := as.publisher.Publish(m.ChannelID, msg); err != nil {
 				return err
 			}
 		}

@@ -21,7 +21,7 @@ import (
 	"github.com/mainflux/mainflux/readers/dbreader/mssql"
 	"github.com/mainflux/mainflux/readers/dbreader/redis"
 
-	pub "github.com/mainflux/mainflux/readers/dbreader/nats"
+	natspub "github.com/mainflux/mainflux/pkg/messaging/nats"
 
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	nats "github.com/nats-io/go-nats"
@@ -76,13 +76,15 @@ func main() {
 		log.Fatalf(err.Error())
 	}
 
-	natsConn := connectToNATS(cfg.natsURL, logger)
-	defer natsConn.Close()
+	publisher, err := natspub.NewPublisher(cfg.natsURL)
+	if err != nil {
+		logger.Error(fmt.Sprintf("Failed to connect to NATS: %s", err))
+		os.Exit(1)
+	}
+	defer publisher.Close()
 
 	esConn := connectToRedis(cfg.esURL, cfg.esPass, cfg.esDB, logger)
 	defer esConn.Close()
-
-	publisher := pub.NewMessagePublisher(natsConn)
 
 	readerManager := dbreader.NewReaderManager(cfg.cfgFile, readerType, mssql.New, logger)
 
@@ -138,17 +140,6 @@ func loadConfig() config {
 		esConsumerName: mainflux.Env(envESConsumerName, defESConsumerName),
 		cfgFile:        mainflux.Env(envDBConfig, defDBConfig),
 	}
-}
-
-func connectToNATS(url string, logger logger.Logger) *nats.Conn {
-	conn, err := nats.Connect(url)
-	if err != nil {
-		logger.Error(fmt.Sprintf("Failed to connect to NATS: %s - %s", url, err))
-		os.Exit(1)
-	}
-
-	logger.Info(fmt.Sprintf("Connected to NATS %s", url))
-	return conn
 }
 
 func connectToRedis(url, pass, DB string, logger logger.Logger) *r.Client {
