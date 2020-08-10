@@ -9,9 +9,9 @@ import (
 
 	_ "github.com/denisenkom/go-mssqldb" // drivers for Microsoft SQL Server
 	"github.com/jmoiron/sqlx"
+	"github.com/mainflux/mainflux/readers/dbreader/fieldbinding"
+	"github.com/mainflux/mainflux/readers/dbreader/reader"
 	"github.com/opentracing/opentracing-go/log"
-	"gitlab.com/mainflux/takeda/dbreader/fieldbinding"
-	"gitlab.com/mainflux/takeda/dbreader/reader"
 )
 
 type mssqlReader struct {

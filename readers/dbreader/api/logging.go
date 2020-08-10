@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/mainflux/mainflux/logger"
-	"gitlab.com/mainflux/takeda/dbreader"
+	"github.com/mainflux/mainflux/readers/dbreader"
 )
 
 var _ dbreader.Service = (*loggingMiddleware)(nil)

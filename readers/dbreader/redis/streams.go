@@ -8,9 +8,9 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis"
-	"github.com/mainflux/mainflux/errors"
 	"github.com/mainflux/mainflux/logger"
-	"gitlab.com/mainflux/takeda/dbreader"
+	"github.com/mainflux/mainflux/pkg/errors"
+	"github.com/mainflux/mainflux/readers/dbreader"
 )
 
 const (

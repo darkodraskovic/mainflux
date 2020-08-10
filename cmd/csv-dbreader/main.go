@@ -13,15 +13,15 @@ import (
 	"syscall"
 
 	r "github.com/go-redis/redis"
-	"gitlab.com/mainflux/takeda/dbreader"
+	"github.com/mainflux/mainflux/readers/dbreader"
 
 	"github.com/mainflux/mainflux"
 	"github.com/mainflux/mainflux/logger"
-	"gitlab.com/mainflux/takeda/dbreader/api"
-	csv "gitlab.com/mainflux/takeda/dbreader/csv"
-	"gitlab.com/mainflux/takeda/dbreader/redis"
+	"github.com/mainflux/mainflux/readers/dbreader/api"
+	csv "github.com/mainflux/mainflux/readers/dbreader/csv"
+	"github.com/mainflux/mainflux/readers/dbreader/redis"
 
-	pub "gitlab.com/mainflux/takeda/dbreader/nats"
+	pub "github.com/mainflux/mainflux/readers/dbreader/nats"
 
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	nats "github.com/nats-io/go-nats"

@@ -11,9 +11,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/mainflux/mainflux/errors"
 	"github.com/mainflux/mainflux/logger"
-	"gitlab.com/mainflux/takeda/dbreader/reader"
+	"github.com/mainflux/mainflux/pkg/errors"
+	"github.com/mainflux/mainflux/readers/dbreader/reader"
 )
 
 var (

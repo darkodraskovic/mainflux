@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/metrics"
-	"gitlab.com/mainflux/takeda/dbreader"
+	"github.com/mainflux/mainflux/readers/dbreader"
 )
 
 var _ dbreader.Service = (*metricsMiddleware)(nil)

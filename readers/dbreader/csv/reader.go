@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mainflux/mainflux/errors"
-	"gitlab.com/mainflux/takeda/dbreader/reader"
+	"github.com/mainflux/mainflux/pkg/errors"
+	"github.com/mainflux/mainflux/readers/dbreader/reader"
 )
 
 const (
