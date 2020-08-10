@@ -34,14 +34,14 @@ const (
 	defHTTPPort = "9205"
 	defNatsURL  = nats.DefaultURL
 
-	defESURL          = "es-redis:6379"
+	defESURL          = "localhost:6379"
 	defESPass         = ""
 	defESDB           = "0"
 	defESConsumerName = "dbreader"
 	defFSUser         = ""
 	defFSPass         = ""
 
-	defCSVConfig = "./config/readers.cfg"
+	defCSVConfig = ""
 
 	envHTTPPort = "MF_CSV_HTTP_PORT"
 	envLogLevel = "MF_CSV_ADAPTER_LOG_LEVEL"
@@ -166,6 +166,7 @@ func connectToRedis(url, pass, DB string, logger logger.Logger) *r.Client {
 		os.Exit(1)
 	}
 
+	logger.Info(fmt.Sprintf("Connected to redis %s", url))
 	return r.NewClient(&r.Options{
 		Addr:     url,
 		Password: pass,

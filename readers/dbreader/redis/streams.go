@@ -35,6 +35,7 @@ const (
 
 var (
 	errMetadataType       = errors.New("metadatada is not of type dbreader")
+	errMetadataChannel    = errors.New("metadatada does not specify channel")
 	errMetadataDBType     = errors.New("metadatada is not of type mssql dbreader")
 	errMetadataFormat     = errors.New("malformed metadata")
 	errMetadataNamespace  = errors.New("dbname not found in channel metadatada")
@@ -129,6 +130,9 @@ func decodeCreateThing(event map[string]interface{}) (createThingEvent, error) {
 
 	if metadata.Type != "dbReader" {
 		return createThingEvent{}, errMetadataType
+	}
+	if len(metadata.ChannelID) < 1 {
+		return createThingEvent{}, errMetadataChannel
 	}
 
 	dbReaderDataJSON, err := json.Marshal(metadata.DbReaderData)

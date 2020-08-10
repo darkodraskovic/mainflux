@@ -82,12 +82,12 @@ func (rm *readerManager) LoadAll() error {
 	if _, err := os.Stat(rm.cfgFile); os.IsNotExist(err) {
 		return errors.Wrap(errFileNotFound, err)
 	}
-
 	file, err := os.OpenFile(rm.cfgFile, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		return errors.Wrap(errOpenFile, err)
 	}
 	defer file.Close()
+	rm.logger.Info(fmt.Sprintf("Loaded config file %s", rm.cfgFile))
 
 	rm.configs = make(map[string]config)
 

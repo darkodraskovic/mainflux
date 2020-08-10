@@ -34,7 +34,7 @@ const (
 	defHTTPPort = "9204"
 	defNatsURL  = nats.DefaultURL
 
-	defESURL          = "es-redis:6379"
+	defESURL          = "localhost:6379"
 	defESPass         = ""
 	defESDB           = "0"
 	defESConsumerName = "dbreader"
@@ -158,6 +158,7 @@ func connectToRedis(url, pass, DB string, logger logger.Logger) *r.Client {
 		os.Exit(1)
 	}
 
+	logger.Info(fmt.Sprintf("Connected to redis %s", url))
 	return r.NewClient(&r.Options{
 		Addr:     url,
 		Password: pass,

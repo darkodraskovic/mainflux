@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/denisenkom/go-mssqldb v0.0.0-20191001013358-cfbb681360f0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/docker/docker v1.13.1
 	github.com/dustin/go-coap v0.0.0-20190908170653-752e0f79981e
@@ -26,6 +27,8 @@ require (
 	github.com/mainflux/mproxy v0.2.1
 	github.com/mainflux/senml v1.5.0
 	github.com/mitchellh/mapstructure v1.1.2
+	github.com/nats-io/gnatsd v1.4.1 // indirect
+	github.com/nats-io/go-nats v1.6.0
 	github.com/nats-io/nats.go v1.10.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/ory/dockertest/v3 v3.6.0

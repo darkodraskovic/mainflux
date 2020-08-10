@@ -86,6 +86,7 @@ func (r *csvReader) Read() (out []map[string]interface{}, err error) {
 
 	// Parse file
 	cr := csv.NewReader(file)
+	cr.TrimLeadingSpace = true
 	cr.LazyQuotes = true
 
 	// Get headers

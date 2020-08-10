@@ -4,15 +4,14 @@
 package dbreader
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/mainflux/mainflux"
 	"github.com/mainflux/mainflux/logger"
 	"github.com/mainflux/mainflux/pkg/errors"
+	"github.com/mainflux/mainflux/pkg/messaging"
 	"github.com/mainflux/mainflux/readers/dbreader/reader"
 )
 
@@ -57,14 +56,14 @@ type Service interface {
 var _ Service = (*adapterService)(nil)
 
 type adapterService struct {
-	publisher     mainflux.MessagePublisher
+	publisher     messaging.Publisher
 	ReaderManager ReaderManager
 	logger        logger.Logger
 	batch         bool
 }
 
 // New instantiates the dbreader adapter implementation.
-func New(pub mainflux.MessagePublisher, ReaderManager ReaderManager, logger logger.Logger) Service {
+func New(pub messaging.Publisher, ReaderManager ReaderManager, logger logger.Logger) Service {
 	return &adapterService{
 		publisher:     pub,
 		ReaderManager: ReaderManager,
@@ -90,15 +89,15 @@ func (as *adapterService) Publish(m Message) error {
 				continue
 			}
 
-			msg := mainflux.Message{
-				Publisher:   m.ThingID,
-				Protocol:    protocol,
-				ContentType: "Content-Type",
-				Channel:     m.ChannelID,
-				Subtopic:    col,
-				Payload:     genSenML(rowID, v),
+			msg := messaging.Message{
+				Publisher: m.ThingID,
+				Protocol:  protocol,
+				Channel:   m.ChannelID,
+				Subtopic:  col,
+				Payload:   genSenML(rowID, v),
 			}
-			if err := as.publisher.Publish(context.TODO(), "", msg); err != nil {
+			topic := "channels." + m.ChannelID + "." + col
+			if err := as.publisher.Publish(topic, msg); err != nil {
 				return err
 			}
 		}
