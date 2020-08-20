@@ -45,7 +45,7 @@ CSV reader is a service that creates a reader for every individual file you want
 }
 ```
 
-You can leave out the interval setting. The default value is `1` read every `60` seconds. If you leave out the column, every column will be read.
+You can leave out the interval setting. The default value is `1`, which means that the .csv file will be read every second. You can put `0.001` to read file every millisecond or `60` to read it every minute. If you leave out the column, every column will be read.
 
 ## Reading process
 
