@@ -182,7 +182,7 @@ func genSenML(rowID, v string) []byte {
 	} else if isBoolean(v) {
 		vKey, vLim = "vb", ""
 	} else if isDate(v) {
-		vKey, vLim = "vd", ""
+		vKey, vLim = "vd", `"`
 	}
 	senml := fmt.Sprintf(`[{"n":"%s","%s":%s%v%s}]`, rowID, vKey, vLim, v, vLim)
 
