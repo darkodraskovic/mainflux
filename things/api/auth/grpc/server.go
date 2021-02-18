@@ -19,9 +19,10 @@ import (
 var _ mainflux.ThingsServiceServer = (*grpcServer)(nil)
 
 type grpcServer struct {
-	canAccessByKey kitgrpc.Handler
-	canAccessByID  kitgrpc.Handler
-	identify       kitgrpc.Handler
+	canAccessByKey          kitgrpc.Handler
+	canAccessByID           kitgrpc.Handler
+	canAccessChannelByOwner kitgrpc.Handler
+	identify                kitgrpc.Handler
 }
 
 // NewServer returns new ThingsServiceServer instance.
@@ -35,6 +36,11 @@ func NewServer(tracer opentracing.Tracer, svc things.Service) mainflux.ThingsSer
 		canAccessByID: kitgrpc.NewServer(
 			canAccessByIDEndpoint(svc),
 			decodeCanAccessByIDRequest,
+			encodeEmptyResponse,
+		),
+		canAccessChannelByOwner: kitgrpc.NewServer(
+			canAccessChannelByOwnerEndpoint(svc),
+			decodeCanAccessChannelByOwnerRequest,
 			encodeEmptyResponse,
 		),
 		identify: kitgrpc.NewServer(
@@ -63,6 +69,15 @@ func (gs *grpcServer) CanAccessByID(ctx context.Context, req *mainflux.AccessByI
 	return res.(*empty.Empty), nil
 }
 
+func (gs *grpcServer) CanAccessChannelByOwner(ctx context.Context, req *mainflux.AccessChannelByOwnerReq) (*empty.Empty, error) {
+	_, res, err := gs.canAccessChannelByOwner.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, encodeError(err)
+	}
+
+	return res.(*empty.Empty), nil
+}
+
 func (gs *grpcServer) Identify(ctx context.Context, req *mainflux.Token) (*mainflux.ThingID, error) {
 	_, res, err := gs.identify.ServeGRPC(ctx, req)
 	if err != nil {
@@ -80,6 +95,11 @@ func decodeCanAccessByKeyRequest(_ context.Context, grpcReq interface{}) (interf
 func decodeCanAccessByIDRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
 	req := grpcReq.(*mainflux.AccessByIDReq)
 	return accessByIDReq{thingID: req.GetThingID(), chanID: req.GetChanID()}, nil
+}
+
+func decodeCanAccessChannelByOwnerRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	req := grpcReq.(*mainflux.AccessChannelByOwnerReq)
+	return accessChannelByOwnerReq{owner: req.GetOwner(), chanID: req.GetChanID()}, nil
 }
 
 func decodeIdentifyRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {

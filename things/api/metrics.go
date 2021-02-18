@@ -184,6 +184,15 @@ func (ms *metricsMiddleware) CanAccessByID(ctx context.Context, chanID, thingID 
 	return ms.svc.CanAccessByID(ctx, chanID, thingID)
 }
 
+func (ms *metricsMiddleware) CanAccessChannelByOwner(ctx context.Context, owner, chanID string) error {
+	defer func(begin time.Time) {
+		ms.counter.With("method", "can_access_channel_by_owner").Add(1)
+		ms.latency.With("method", "can_access_channel_by_owner").Observe(time.Since(begin).Seconds())
+	}(time.Now())
+
+	return ms.svc.CanAccessByID(ctx, owner, chanID)
+}
+
 func (ms *metricsMiddleware) Identify(ctx context.Context, key string) (string, error) {
 	defer func(begin time.Time) {
 		ms.counter.With("method", "identify").Add(1)

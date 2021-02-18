@@ -121,6 +121,10 @@ type Service interface {
 	// the given thing and returns error if it cannot.
 	CanAccessByID(ctx context.Context, chanID, thingID string) error
 
+	// CanAccessChannelByOwner determines whether the channel can be accessed by
+	// the given user and returns error if it cannot.
+	CanAccessChannelByOwner(ctx context.Context, owner, chanID string) error
+
 	// Identify returns thing ID for given thing key.
 	Identify(ctx context.Context, key string) (string, error)
 
@@ -377,6 +381,13 @@ func (ts *thingsService) CanAccessByID(ctx context.Context, chanID, thingID stri
 	return nil
 }
 
+func (ts *thingsService) CanAccessChannelByOwner(ctx context.Context, owner, chanID string) error {
+	if _, err := ts.channels.RetrieveByID(ctx, owner, chanID); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (ts *thingsService) Identify(ctx context.Context, key string) (string, error) {
 	id, err := ts.thingCache.ID(ctx, key)
 	if err == nil {
@@ -431,7 +442,6 @@ func (ts *thingsService) ListGroups(ctx context.Context, token string, level uin
 		return groups.GroupPage{}, errors.Wrap(ErrUnauthorizedAccess, err)
 	}
 	return ts.groups.RetrieveAll(ctx, level, gm)
-
 }
 
 func (ts *thingsService) ListParents(ctx context.Context, token string, childID string, level uint64, gm groups.Metadata) (groups.GroupPage, error) {

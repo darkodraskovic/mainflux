@@ -31,6 +31,19 @@ func (req accessByIDReq) validate() error {
 	return nil
 }
 
+type accessChannelByOwnerReq struct {
+	owner  string
+	chanID string
+}
+
+func (req accessChannelByOwnerReq) validate() error {
+	if req.owner == "" || req.chanID == "" {
+		return things.ErrMalformedEntity
+	}
+
+	return nil
+}
+
 type identifyReq struct {
 	key string
 }

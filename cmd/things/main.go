@@ -42,7 +42,7 @@ import (
 )
 
 const (
-	defLogLevel        = "error"
+	defLogLevel        = "info"
 	defDBHost          = "localhost"
 	defDBPort          = "5432"
 	defDBUser          = "mainflux"
