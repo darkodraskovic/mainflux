@@ -54,7 +54,7 @@ var (
 // Service specifies an API that must be fullfiled by the domain service
 // implementation, and all of its decorators (e.g. logging & metrics).
 type Service interface {
-	// CreateThings adds a list of things to the user identified by the provided key.
+	// CreateThings adds things to the user identified by the provided key.
 	CreateThings(ctx context.Context, token string, things ...Thing) ([]Thing, error)
 
 	// UpdateThing updates the thing identified by the provided ID, that
@@ -82,7 +82,7 @@ type Service interface {
 	// belongs to the user identified by the provided key.
 	RemoveThing(ctx context.Context, token, id string) error
 
-	// CreateChannels adds a list of channels to the user identified by the provided key.
+	// CreateChannels adds channels to the user identified by the provided key.
 	CreateChannels(ctx context.Context, token string, channels ...Channel) ([]Channel, error)
 
 	// UpdateChannel updates the channel identified by the provided ID, that
