@@ -237,8 +237,8 @@ func (es eventStore) CanAccessByID(ctx context.Context, chanID string, thingID s
 	return es.svc.CanAccessByID(ctx, chanID, thingID)
 }
 
-func (es eventStore) CanAccessChannelByOwner(ctx context.Context, owner, chanID string) error {
-	return es.svc.CanAccessChannelByOwner(ctx, owner, chanID)
+func (es eventStore) IsChannelOwner(ctx context.Context, owner, chanID string) error {
+	return es.svc.IsChannelOwner(ctx, owner, chanID)
 }
 
 func (es eventStore) Identify(ctx context.Context, key string) (string, error) {

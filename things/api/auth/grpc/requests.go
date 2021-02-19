@@ -31,12 +31,12 @@ func (req accessByIDReq) validate() error {
 	return nil
 }
 
-type accessChannelByOwnerReq struct {
+type channelOwnerReq struct {
 	owner  string
 	chanID string
 }
 
-func (req accessChannelByOwnerReq) validate() error {
+func (req channelOwnerReq) validate() error {
 	if req.owner == "" || req.chanID == "" {
 		return things.ErrMalformedEntity
 	}

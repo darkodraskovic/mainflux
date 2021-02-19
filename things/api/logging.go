@@ -254,9 +254,9 @@ func (lm *loggingMiddleware) CanAccessByID(ctx context.Context, chanID, thingID 
 	return lm.svc.CanAccessByID(ctx, chanID, thingID)
 }
 
-func (lm *loggingMiddleware) CanAccessChannelByOwner(ctx context.Context, owner, chanID string) (err error) {
+func (lm *loggingMiddleware) IsChannelOwner(ctx context.Context, owner, chanID string) (err error) {
 	defer func(begin time.Time) {
-		message := fmt.Sprintf("Method can_access_channel_by_owner for channel %s and user %s took %s to complete", chanID, owner, time.Since(begin))
+		message := fmt.Sprintf("Method is_channel_owner for channel %s and user %s took %s to complete", chanID, owner, time.Since(begin))
 		if err != nil {
 			lm.logger.Warn(fmt.Sprintf("%s with error: %s.", message, err))
 			return
@@ -264,7 +264,7 @@ func (lm *loggingMiddleware) CanAccessChannelByOwner(ctx context.Context, owner,
 		lm.logger.Info(fmt.Sprintf("%s without errors.", message))
 	}(time.Now())
 
-	return lm.svc.CanAccessChannelByOwner(ctx, owner, chanID)
+	return lm.svc.IsChannelOwner(ctx, owner, chanID)
 }
 
 func (lm *loggingMiddleware) Identify(ctx context.Context, key string) (id string, err error) {

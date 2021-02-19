@@ -19,11 +19,11 @@ import (
 var _ mainflux.ThingsServiceClient = (*grpcClient)(nil)
 
 type grpcClient struct {
-	timeout                 time.Duration
-	canAccessByKey          endpoint.Endpoint
-	canAccessByID           endpoint.Endpoint
-	canAccessChannelByOwner endpoint.Endpoint
-	identify                endpoint.Endpoint
+	timeout        time.Duration
+	canAccessByKey endpoint.Endpoint
+	canAccessByID  endpoint.Endpoint
+	isChannelOwner endpoint.Endpoint
+	identify       endpoint.Endpoint
 }
 
 // NewClient returns new gRPC client instance.
@@ -48,11 +48,11 @@ func NewClient(conn *grpc.ClientConn, tracer opentracing.Tracer, timeout time.Du
 			decodeEmptyResponse,
 			empty.Empty{},
 		).Endpoint()),
-		canAccessChannelByOwner: kitot.TraceClient(tracer, "can_access_channel_by_owner")(kitgrpc.NewClient(
+		isChannelOwner: kitot.TraceClient(tracer, "is_channel_owner")(kitgrpc.NewClient(
 			conn,
 			svcName,
-			"CanAccessChannelByOwner",
-			encodeCanAccessChannelByOwner,
+			"IsChannelOwner",
+			encodeIsChannelOwner,
 			decodeEmptyResponse,
 			empty.Empty{},
 		).Endpoint()),
@@ -95,9 +95,9 @@ func (client grpcClient) CanAccessByID(ctx context.Context, req *mainflux.Access
 	return &empty.Empty{}, er.err
 }
 
-func (client grpcClient) CanAccessChannelByOwner(ctx context.Context, req *mainflux.AccessChannelByOwnerReq, _ ...grpc.CallOption) (*empty.Empty, error) {
-	ar := accessChannelByOwnerReq{owner: req.GetOwner(), chanID: req.GetChanID()}
-	res, err := client.canAccessChannelByOwner(ctx, ar)
+func (client grpcClient) IsChannelOwner(ctx context.Context, req *mainflux.ChannelOwnerReq, _ ...grpc.CallOption) (*empty.Empty, error) {
+	ar := channelOwnerReq{owner: req.GetOwner(), chanID: req.GetChanID()}
+	res, err := client.isChannelOwner(ctx, ar)
 	if err != nil {
 		return nil, err
 	}
@@ -129,9 +129,9 @@ func encodeCanAccessByIDRequest(_ context.Context, grpcReq interface{}) (interfa
 	return &mainflux.AccessByIDReq{ThingID: req.thingID, ChanID: req.chanID}, nil
 }
 
-func encodeCanAccessChannelByOwner(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(accessChannelByOwnerReq)
-	return &mainflux.AccessChannelByOwnerReq{Owner: req.owner, ChanID: req.chanID}, nil
+func encodeIsChannelOwner(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	req := grpcReq.(channelOwnerReq)
+	return &mainflux.ChannelOwnerReq{Owner: req.owner, ChanID: req.chanID}, nil
 }
 
 func encodeIdentifyRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {

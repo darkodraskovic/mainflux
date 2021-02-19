@@ -9,7 +9,7 @@ import "google/protobuf/empty.proto";
 
 service ThingsService {
     rpc CanAccessByKey(AccessByKeyReq) returns (ThingID) {}
-    rpc CanAccessChannelByOwner(AccessChannelByOwnerReq) returns (google.protobuf.Empty) {}
+    rpc IsChannelOwner(ChannelOwnerReq) returns (google.protobuf.Empty) {}
     rpc CanAccessByID(AccessByIDReq) returns (google.protobuf.Empty) {}
     rpc Identify(Token) returns (ThingID) {}
 }
@@ -27,7 +27,7 @@ message AccessByKeyReq {
     string chanID = 2;
 }
 
-message AccessChannelByOwnerReq {
+message ChannelOwnerReq {
     string owner  = 1;
     string chanID = 2;
 }

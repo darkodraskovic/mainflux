@@ -121,9 +121,9 @@ type Service interface {
 	// the given thing and returns error if it cannot.
 	CanAccessByID(ctx context.Context, chanID, thingID string) error
 
-	// CanAccessChannelByOwner determines whether the channel can be accessed by
+	// IsChannelOwner determines whether the channel can be accessed by
 	// the given user and returns error if it cannot.
-	CanAccessChannelByOwner(ctx context.Context, owner, chanID string) error
+	IsChannelOwner(ctx context.Context, owner, chanID string) error
 
 	// Identify returns thing ID for given thing key.
 	Identify(ctx context.Context, key string) (string, error)
@@ -381,7 +381,7 @@ func (ts *thingsService) CanAccessByID(ctx context.Context, chanID, thingID stri
 	return nil
 }
 
-func (ts *thingsService) CanAccessChannelByOwner(ctx context.Context, owner, chanID string) error {
+func (ts *thingsService) IsChannelOwner(ctx context.Context, owner, chanID string) error {
 	if _, err := ts.channels.RetrieveByID(ctx, owner, chanID); err != nil {
 		return err
 	}
