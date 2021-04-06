@@ -38,6 +38,22 @@ COPY --from=builder /go/kuiper/plugins/sinks/mainflux.so /kuiper/plugins/sinks/m
 
 WORKDIR ${KUIPER_HOME}
 
+# # These vars are not persisted in the final image layer
+# ARG KUIPER_USER="kuiper"
+# ARG KUIPER_USER_ID="1001"
+
+# # Set appropriate ownership to allow binary full access to KUIPER_HOME dir
+# RUN adduser -DH -s /sbin/nologin -u ${KUIPER_USER_ID} ${KUIPER_USER} && \
+#     chown -Rh ${KUIPER_USER}:${KUIPER_USER} ${KUIPER_HOME} && \
+#     mkdir -p /usr/local/taos && \
+#     chown -Rh ${KUIPER_USER}:${KUIPER_USER} /usr/local/taos
+
+# # Run the kuiper process under the kuiper user
+# USER ${KUIPER_USER}
+
+# VOLUME ["${KUIPER_HOME}/etc", "${KUIPER_HOME}/data", "${KUIPER_HOME}/plugins", "${KUIPER_HOME}/log"]
+# EXPOSE 9081 20498
+
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
 
 CMD ["./bin/kuiperd"]

@@ -51,6 +51,7 @@ func (ms *mainfluxSource) Open(ctx api.StreamContext, consumer chan<- api.Source
 		topic = "channels." + ms.topic
 	}
 	if err := ms.pubSub.Subscribe(topic, ms.handle); err != nil {
+		panic("panic")
 		errCh <- fmt.Errorf("Failed to subscribe to nats topic %s with error: %v", topic, err)
 		return
 	}
